@@ -1,6 +1,7 @@
 package com.ezen.spring.repository;
 
 import com.ezen.spring.domain.BoardVO;
+import com.ezen.spring.domain.PagingVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -9,6 +10,11 @@ import java.util.List;
 public interface BoardMapper {
     int register(BoardVO bvo);
 
-    List<BoardVO> getList();
+    BoardVO getDetail(long bno);
 
+    int update(BoardVO bvo);
+
+    List<BoardVO> getList(PagingVO pgvo);
+
+    int getTotalCount(PagingVO pgvo);
 }

@@ -20,7 +20,14 @@
         <label for="c" class="form-label">Contents</label>
         <textarea class="form-control" name="content" id="c" rows="3" placeholder="Contents.."></textarea>
       </div>
-      <button type="submit" class="btn btn-primary">register</button>
+      <div class="mb-3">
+        <label for="file" class="form-label">File</label>
+        <input type="file" class="form-control" name="files" id="file" multiple style="display:none;"></input>
+          <button type="button" class="btn btn-info" id="trigger">file upload</button>
+      </div>
+        <!--/* file 출력라인 */-->
+        <div class="input-group mb-3" id="fileZone"></div>
+        <button type="submit" class="btn btn-primary" id="regBtn">register</button>
     </form>
-
+    <script th:src="@{/js/boardRegister.js}"></script>
 </div>
