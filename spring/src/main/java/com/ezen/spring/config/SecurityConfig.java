@@ -29,15 +29,15 @@ public class SecurityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize ->
                         authorize.requestMatchers("/user/list").hasAnyRole("ADMIN")
-                                .requestMatchers("/","/index","/js/**","/upload/**","/user/login",
-                                        "/user/register","/user/signup","/board/list","/board/detail","/comment/list","/dist/**").permitAll()
+                                .requestMatchers("/","/index","/js/**","/upload/**","/user/login","/img/**",
+                                        "/user/register","/user/signup","/board/list","/board/detail","/comment/list/**","/dist/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .usernameParameter("email")
                         .passwordParameter("pwd")
                         .loginPage("/user/login")
-                        .defaultSuccessUrl("/board/list").permitAll()
+                        .defaultSuccessUrl("/").permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/user/logout")

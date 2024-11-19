@@ -1,5 +1,15 @@
 console.log("boardComment.js connect test");
-console.log(bnoVal);
+
+// detail 에 댓글 뿌리기
+async function getCommentListFromServer(bno, page) {
+    try {
+        const resp = await fetch('/comment/list/'+bnoVal+'/'+page);
+        const result = await resp.json();
+        return result;
+    } catch(error) {
+        console.log(error);
+    }
+}
 
 document.getElementById("cmtAdd").addEventListener('click', ()=>{
     const cmtText = document.getElementById("cmtText");
@@ -25,16 +35,7 @@ document.getElementById("cmtAdd").addEventListener('click', ()=>{
         }
     });
 })
-// detail 에 댓글 뿌리기
-async function getCommentListFromServer(bno, page) {
-    try {
-        const resp = await fetch('/comment/list/'+bnoVal+'/'+page);
-        const result = await resp.json();
-        return result;
-    } catch(error) {
-        console.log(error);
-    }
-}
+
 
 function spreadCommentList(bnoVal, page=1) {
     getCommentListFromServer(bnoVal, page).then(result => {
@@ -51,8 +52,10 @@ function spreadCommentList(bnoVal, page=1) {
                 li += `<div class="fw-bold">${cvo.writer}</div>`;
                 li += `${cvo.content} </div>`;
                 li += `<span class="badge text-bg-primary rounded-pill">regDate</span>`;
-                li += `<button type="button" class="btn btn-primary mod" data-bs-toggle="modal" data-bs-target="#myModal">수정</button>`
-                li += `<button type="button" class="btn btn-danger del">삭제</button>`;
+                if( nickName == cvo.writer ) {
+                    li += `<button type="button" class="btn btn-primary mod" data-bs-toggle="modal" data-bs-target="#myModal">수정</button>`
+                    li += `<button type="button" class="btn btn-danger del">삭제</button>`;
+                }
                 // 나중에 버튼태그 data-cno=${cvo.cno} 추가
                 li += `</li>`;
                 ul.innerHTML += li;

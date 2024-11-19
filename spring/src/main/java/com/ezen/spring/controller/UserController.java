@@ -7,9 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequestMapping("/user/*")
@@ -38,4 +39,33 @@ public class UserController {
 
     }
 
+    @GetMapping("/list")
+    public String userList(Model m) {
+        List<UserVO> userList = usv.getList();
+        m.addAttribute("userList", userList);
+        return "/user/list";
+    }
+
+    @GetMapping("/modify")
+    public String userInfo() {
+        return "/user/modify";
+    }
+
+    @PostMapping("/update")
+    public String userUpdate(UserVO uvo) {
+        if(uvo.getPwd().isEmpty() || uvo.getPwd().length() == 0) {
+            int isOk = usv.userUpdatePwdEmpty(uvo);
+        } else {
+            uvo.setPwd(passwordEncoder.encode(uvo.getPwd()));
+            int isOk = usv.userUpdate(uvo);
+        }
+        return "/index";
+    }
+
+    @GetMapping("/delete")
+    public String userDelete(@RequestParam("email")String email) {
+        int isOk = usv.userDelete(email);
+        log.info(">> user delete > {}", isOk>0? "ok":"fail");
+        return "/index";
+    }
 }

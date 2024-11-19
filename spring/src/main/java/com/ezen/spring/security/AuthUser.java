@@ -20,6 +20,7 @@ public class AuthUser extends User {
         super(username, password, authorities);
     }
 
+    // principal
     public AuthUser(UserVO uvo) {
         super(uvo.getEmail(), uvo.getPwd(),
                 uvo.getAuthList().stream()

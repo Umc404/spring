@@ -2,6 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout/layout}">
 
 <div layout:fragment="content" class="container-md">
@@ -71,9 +72,11 @@
 
     <!--/* comment line */-->
     <!--/* post */-->
-    <div class="input-group mb-3">
-      <span class="input-group-text" id="cmtWriter">Annonymous</span>
-      <input type="text" id="cmtText" class="form-control" placeholder="write comment.." aria-label="Username" aria-describedby="basic-addon1">
+    <div class="input-group mb-3" sec:authorize="isAuthenticated()">
+      <span class="input-group-text" id="cmtWriter"
+            th:text="${#authentication.getPrincipal().uvo.nickName}">
+      </span>
+        <input type="text" id="cmtText" class="form-control" placeholder="write comment.." aria-label="Username" aria-describedby="basic-addon1">
       <button type="button" id="cmtAdd" class="btn btn-secondary">Post</button>
     </div>
 
@@ -112,18 +115,25 @@
       </div>
     </div>
 
-<script th:inline="javascript">
-  const bnoVal = [[${bvo.bno}]];
-  console.log(bnoVal); // 페이지에서 실행 시 parameter:line 으로 표시 : detail?bno=407:155
+    <script th:inline="javascript">
+      let bnoVal = [[${bvo.bno}]]
+      let nickName= "";
+    </script>
 
-</script>
+  <th:block sec:authorize="isAuthenticated()"
+            th:with="auth=${#authentication.getPrincipal().uvo}">
+    <script th:inline="javascript">
+      nickName = [[${auth.nickName}]];
+      console.log(nickName);
+    </script>
+  </th:block>
+    <script th:src="@{/js/boardDetail.js}"></script>
+    <script th:src="@{/js/boardRegister.js}"></script>
+    <script th:src="@{/js/boardComment.js}"></script>
+    <script>
+      spreadCommentList(bnoVal);
+    </script>
 
   </th:block>
 
-  <script th:src="@{/js/boardDetail.js}"></script>
-  <script th:src="@{/js/boardRegister.js}"></script>
-  <script th:src="@{/js/boardComment.js}"></script>
-  <script>
-    spreadCommentList(bnoVal);
-  </script>
 </div>

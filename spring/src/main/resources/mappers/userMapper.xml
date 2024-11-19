@@ -20,4 +20,22 @@
     <select id="selectAuths" resultType="com.ezen.spring.domain.AuthVO">
         select * from auth where email = #{email}
     </select>
+
+    <select id="getList" resultType="com.ezen.spring.domain.UserVO">
+        select * from user
+    </select>
+
+    <update id="userUpdatePwdEmpty">
+        update user set nick_name = #{nickName}
+        where email = #{email}
+    </update>
+
+    <update id="userUpdate">
+        update user set nick_name = #{nickName}, pwd = #{pwd}
+        where email = #{email}
+    </update>
+
+    <delete id="userDelete">
+        delete from user where email = #{email}
+    </delete>
 </mapper>

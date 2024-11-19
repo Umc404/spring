@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content" class="container-md">
+    <h1>User Info</h1>
+  <hr>
+  <form action="/user/update" method="post">
+    <div class="mb-3">
+      <label for="e" class="form-label">email</label>
+      <input type="text" class="form-control" th:value="${#authentication.getPrincipal().uvo.email}" id="e" name="email" placeholder="email.." readonly>
+    </div>
+    <div class="mb-3">
+      <label for="p" class="form-label">password</label>
+      <input type="text" class="form-control" id="p" name="pwd" placeholder="password..">
+    </div>
+    <div class="mb-3">
+      <label for="n" class="form-label">nickName</label>
+      <input type="text" class="form-control" th:value="${#authentication.getPrincipal().uvo.nickName}" id="n" name="nickName" placeholder="nickname..">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a href="/user/delete"><button type="button" class="btn btn-danger">Delete</button></a>
+  </form>
+</div>
