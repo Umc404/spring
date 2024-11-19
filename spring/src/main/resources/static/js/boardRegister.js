@@ -1,4 +1,4 @@
-console.log("js connect test");
+console.log("boardRegister.js connect test");
 
 document.getElementById('trigger').addEventListener('click', ()=>{
     document.getElementById('file').click();
@@ -23,7 +23,7 @@ document.addEventListener('change',(e)=> {
     if(e.target.id == 'file') {
         const fileObject = document.getElementById('file').files;
         console.log(fileObject);
-        document.getElementById('regBtn').disabled = false;
+        //document.getElementById('regBtn').disabled = false;
 
         const fileZone = document.getElementById('fileZone');
         // 이전에 추가한 파일 삭제
@@ -51,12 +51,16 @@ document.addEventListener('change',(e)=> {
     }
 })
 
-/*
-<ul class="list-group list-group-flush">
-  <li class="list-group-item">An item</li>
-  <li class="list-group-item">A second item</li>
-  <li class="list-group-item">A third item</li>
-  <li class="list-group-item">A fourth item</li>
-  <li class="list-group-item">And a fifth one</li>
-</ul>
-*/
+async function removeFileToServer(uuid) {
+    try {
+        const url = "/board/file/"+uuid;
+        const config = {
+            method: 'delete'
+        }
+        const resp = await fetch(url, config);
+        const result = await resp.text();
+        return result;
+    } catch (error){
+        console.log(error);
+    }
+}

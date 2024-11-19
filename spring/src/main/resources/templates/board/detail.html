@@ -5,35 +5,125 @@
       layout:decorate="~{layout/layout}">
 
 <div layout:fragment="content" class="container-md">
-<h1>detail</h1>
+<h1>detail page</h1>
 <hr>
-<form action="/board/modify" method="post" id="modForm">
-  <div class="mb-3">
-    <label for="bno" class="form-label">No.</label>
-    <input type="hidden" name="bno" value="${bvo.bno }">
-    <input type="text" class="form-control" id="bno" name="bno" th:value="${bvo.bno }" readonly>
-  </div>
-  <div class="mb-3">
-    <label for="title" class="form-label">Title</label>
-    <input type="text" class="form-control" id="title" name="title" th:value="${bvo.title }" readonly>
-  </div>
-  <div class="mb-3">
-    <label for="writer" class="form-label">Writer</label>
-    <input type="text" class="form-control" id="writer" name="writer" th:value="${bvo.writer }" readonly>
-    <span class="badge text-bg-info">[[${bvo.regDate }]]</span>
-  </div>
-  <div class="mb-3">
-    <label for="content" class="form-label">Content</label>
-    <textarea class="form-control" id="content" name="content" rows="3" readonly>[[${bvo.content }]]</textarea>
-  </div>
-  <button type="button" class="btn btn-primary" id="listBtn">listBtn</button>
-  <button type="button" class="btn btn-secondary" id="modBtn">modBtn</button>
-  <button type="button" class="btn btn-danger" id="delBtn">Remove</button>
-</form>
-  <form action="/board/delete" method="get" id="delForm">
-    <input type="hidden" name="bno" th:value="${bvo.bno}">
-  </form>
+  <th:block th:with="bvo=${bdto.bvo}">
+
+    <form action="/board/modify" method="post" id="modForm" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="bno" class="form-label">No.</label>
+        <input type="hidden" name="bno" th:value="${bvo.bno }">
+        <input type="text" class="form-control" id="bno" name="bno" th:value="${bvo.bno }" readonly>
+      </div>
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title" th:value="${bvo.title }" readonly>
+      </div>
+      <div class="mb-3">
+        <label for="writer" class="form-label">Writer</label>
+        <input type="text" class="form-control" id="writer" name="writer" th:value="${bvo.writer }" readonly>
+        <span class="badge text-bg-info">[[${bvo.regDate }]]</span>
+      </div>
+      <div class="mb-3">
+        <label for="content" class="form-label">Content</label>
+        <textarea class="form-control" id="content" name="content" rows="3" readonly>[[${bvo.content }]]</textarea>
+      </div>
+
+      <!--/* file print line */-->
+      <div class="mb-3">
+        <ul class="list-group">
+          <li th:each="fvo:${bdto.flist}" class="list-group-item" aria-current="true">
+              <div th:if="${fvo.fileType > 0}" class="ms-2 me-auto">
+                <img th:src="@{|/upload/${fvo.saveDir}/${fvo.uuid}_${fvo.fileName}|}" alt="img"/>
+              </div>
+              <div th:unless="${fvo.fileType > 0}" class="ms-2 me-auto">
+                <!-- icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+                  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z"/>
+                </svg>
+              </div>
+              <div class="ms-2 me-auto">
+                <div class="fw-bold">[[${fvo.fileName}]]</div>
+              [[${fvo.regDate}]]
+              </div>
+              <span class="badge text-bg-success rounded-pill">[[${fvo.fileSize}]]Bytes</span>
+              <button type="button" th:data-uuid="${fvo.uuid}" class="btn btn-warning bnt-sm file-x" disabled>X</button>
+
+          </li>
+        </ul>
+
+      </div>
+
+      <div class="mb-3">
+        <label for="file" class="form-label">File</label>
+        <input type="file" class="form-control" name="files" id="file" multiple style="display:none;"></input>
+        <button type="button" class="btn btn-info" id="trigger" disabled>file upload</button>
+      </div>
+      <!--/* file zone */-->
+      <div class="input-group mb-3" id="fileZone"></div>
+      <button type="button" class="btn btn-primary" id="listBtn">listBtn</button>
+      <button type="button" class="btn btn-secondary" id="modBtn">modBtn</button>
+      <button type="button" class="btn btn-danger" id="delBtn">Remove</button>
+    </form>
+    <form action="/board/delete" method="get" id="delForm">
+      <input type="hidden" name="bno" th:value="${bvo.bno}">
+    </form>
+
+    <!--/* comment line */-->
+    <!--/* post */-->
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="cmtWriter">Annonymous</span>
+      <input type="text" id="cmtText" class="form-control" placeholder="write comment.." aria-label="Username" aria-describedby="basic-addon1">
+      <button type="button" id="cmtAdd" class="btn btn-secondary">Post</button>
+    </div>
+
+    <!--/* spread */-->
+    <ul class="list-group list-group-flush" id="cmtListArea">
+      <li class="list-group-item">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Comment name</div>
+          Content
+        </div>
+        <span class="badge text-bg-primary rounded-pill">regDate</span>
+      </li>
+    </ul>
+
+    <!--/* moreBtn */-->
+    <div>
+      <button type="button" id="moreBtn" data-page="1" class="btn btn-dark" style="visibility: hidden">More +</button>
+    </div>
+
+    <!--/* modal line */-->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="cmtWriterMod"></h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <input type="text" class="form-control" id="cmtTextMod">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" id="cmtModBtn" class="btn btn-primary">Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<script th:inline="javascript">
+  const bnoVal = [[${bvo.bno}]];
+  console.log(bnoVal); // 페이지에서 실행 시 parameter:line 으로 표시 : detail?bno=407:155
+
+</script>
+
+  </th:block>
 
   <script th:src="@{/js/boardDetail.js}"></script>
-
+  <script th:src="@{/js/boardRegister.js}"></script>
+  <script th:src="@{/js/boardComment.js}"></script>
+  <script>
+    spreadCommentList(bnoVal);
+  </script>
 </div>

@@ -1,18 +1,26 @@
 package com.ezen.spring.service;
 
+import com.ezen.spring.domain.BoardDTO;
 import com.ezen.spring.domain.BoardVO;
+import com.ezen.spring.domain.FileVO;
 import com.ezen.spring.domain.PagingVO;
 
 import java.util.List;
 
 public interface BoardService {
-    int register(BoardVO bvo);
+    int register(BoardDTO bdto);
 
     List<BoardVO> getList(PagingVO pgvo);
 
-     BoardVO getDetail(long bno);
+     BoardDTO getDetail(long bno);
 
-    int update(BoardVO bvo);
+    int update(BoardDTO bdto);
 
     int getTotalCount(PagingVO pgvo);
+
+    int delete(long bno);
+
+    int removeFile(String uuid);
+
+    FileVO getFile(String uuid);
 }

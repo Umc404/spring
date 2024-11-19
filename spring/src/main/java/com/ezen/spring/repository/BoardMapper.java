@@ -1,5 +1,6 @@
 package com.ezen.spring.repository;
 
+import com.ezen.spring.domain.BoardDTO;
 import com.ezen.spring.domain.BoardVO;
 import com.ezen.spring.domain.PagingVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,4 +18,8 @@ public interface BoardMapper {
     List<BoardVO> getList(PagingVO pgvo);
 
     int getTotalCount(PagingVO pgvo);
+
+    long getBno();
+
+    int delete(long bno);
 }
