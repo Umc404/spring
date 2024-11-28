@@ -85,6 +85,7 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
+
     // 비동기 첨부파일 삭제임. 혼동 X
     @ResponseBody
     @DeleteMapping("/file/{uuid}")

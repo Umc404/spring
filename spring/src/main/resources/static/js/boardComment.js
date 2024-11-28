@@ -77,6 +77,7 @@ function spreadCommentList(bnoVal, page=1) {
     })
 }
 
+// 더보기 , 삭제 버튼
 document.addEventListener('click', (e)=> {
     console.log(e.target);
     if(e.target.id == 'moreBtn') {
